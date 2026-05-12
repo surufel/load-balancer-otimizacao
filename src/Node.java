@@ -5,6 +5,6 @@ public class Node{
 
     public Node(PacketRule rule) {
             this.rule = rule;
-            this.height = 1;
+            this.height = 0;
         }
 }
