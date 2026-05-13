@@ -166,4 +166,30 @@ public class AVL_Router_Tree {
             return no;
         }
     }
+
+    private Node delete(Node no, int id) {
+        if (no == null)
+            return null;
+
+        if (id < no.rule.id)
+            no.left = delete(no.left, id);
+        else if (id > no.rule.id)
+            no.right = delete(no.right, id);
+        else {
+            if (no.left == null)
+                return no.right;
+            if (no.right == null)
+                return no.left;
+
+            // Encontra o menor da subárvore direita
+            Node sucessor = no.right;
+            while (sucessor.left != null)
+                sucessor = sucessor.left;
+
+            no.rule = sucessor.rule;
+            no.right = delete(no.right, sucessor.rule.id);
+        }
+
+        return rebalanceamento(no);
+    }
 }
