@@ -133,8 +133,9 @@ public class AVL_Router_Tree {
 
     private Node insert(Node no, PacketRule rule) {
         // BST
-        if (no == null)
+        if (no == null){
             return new Node(rule);
+        }
 
         if(rule.id < no.rule.id){
             no.left = insert(no.left, rule);
@@ -145,5 +146,24 @@ public class AVL_Router_Tree {
             return no;
         }
         return rebalanceamento(no);
+    }
+
+    public Node search(int id){
+        return search(root, id);
+    }
+
+    private Node search(Node no, int id){
+        if (no == null){
+            return null;
+        }
+
+        if (id < no.rule.id){
+            return search(no.left, id);
+        }
+        else if(id > no.rule.id){
+            return search(no.right, id);
+        } else {
+            return no;
+        }
     }
 }
