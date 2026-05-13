@@ -13,8 +13,8 @@ public class AVL_Router_Tree {
         retorne no.altura
     */
 
-    private int obter_altura(Node no){
-        if(no == null){
+    private int obter_altura(Node no) {
+        if (no == null) {
             return -1;
         }
         return no.height;
@@ -26,8 +26,8 @@ public class AVL_Router_Tree {
         retorne obter_altura(no.esquerda) - obter_altura(no.direita)
     */
 
-    private int calcular_FB(Node no){ // Fator de Balanceamento (FB = h(esq) - h(dir))
-        if(no == null){
+    private int calcular_FB(Node no) { // Fator de Balanceamento (FB = h(esq) - h(dir))
+        if (no == null) {
             return 0;
         }
         return obter_altura(no.left) - obter_altura(no.right);
@@ -50,24 +50,24 @@ public class AVL_Router_Tree {
             return Rotação_Dupla_Dir_Esq(no) (RL)
 */
 
-    private Node rebalanceamento(Node no){
+    private Node rebalanceamento(Node no) {
         no.height = 1 + Math.max(obter_altura(no.left), obter_altura(no.right));
         int FB = calcular_FB(no);
 
         // Esquerda pesada (FB > 1)
-        if(FB > 1){
-            if(calcular_FB(no.left) >= 0){
+        if (FB > 1) {
+            if (calcular_FB(no.left) >= 0) {
                 return rotacao_Simples_Direita(no); // LL
-            } else{
+            } else {
                 return rotacao_Dupla_Esq_Dir(no); // LR, a fazer
             }
         }
 
         // Direita pesada (FB < -1)
-        if(FB < -1){
-            if (calcular_FB(no.right) <= 0){
+        if (FB < -1) {
+            if (calcular_FB(no.right) <= 0) {
                 return rotacao_Simples_Esquerda(no); // RR, a fazer
-            } else{
+            } else {
                 return rotacao_Dupla_Dir_Esq(no); // RL, a fazer
             }
         }
@@ -85,7 +85,7 @@ public class AVL_Router_Tree {
         A.altura = 1 + max(obter_altura(A.esq), obter_altura(A.dir))B.altura = 1 + max(obter_altura(B.esq), obter_altura(B.dir))retorne B // B é a nova raiz local
      */
 
-    private Node rotacao_Simples_Direita(Node A){
+    private Node rotacao_Simples_Direita(Node A) {
         Node B = A.left;
         Node T2 = B.right;
 
@@ -94,6 +94,19 @@ public class AVL_Router_Tree {
 
         A.height = 1 + Math.max(obter_altura(A.left), obter_altura(A.right));
         B.height = 1 + Math.max(obter_altura(B.left), obter_altura(B.right));
+        return B;
+    }
+
+    private Node rotacao_Simples_Esquerda(Node A) {
+        Node B = A.right;
+        Node T2 = B.left;
+
+        B.left = A;
+        A.right = T2;
+
+        A.height = 1 + Math.max(obter_altura(A.left), obter_altura(A.right));
+        B.height = 1 + Math.max(obter_altura(B.left), obter_altura(B.right));
+
         return B;
     }
 }
