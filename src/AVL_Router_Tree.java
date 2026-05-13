@@ -57,7 +57,7 @@ public class AVL_Router_Tree {
         // Esquerda pesada (FB > 1)
         if(FB > 1){
             if(calcular_FB(no.left) >= 0){
-                return rotacao_Simples_Direita(no); // LL, a fazer
+                return rotacao_Simples_Direita(no); // LL
             } else{
                 return rotacao_Dupla_Esq_Dir(no); // LR, a fazer
             }
@@ -73,5 +73,27 @@ public class AVL_Router_Tree {
         }
 
         return no; // Nó Balanceado
+    }
+    /*
+    Função rotacionar_direita(A):
+        B = A.esquerda
+        T2 = B.direita
+        // Rearranjo
+        B.direita = A
+        A.esquerda = T2
+        // Atualizar alturas (A primeiro, depois B)
+        A.altura = 1 + max(obter_altura(A.esq), obter_altura(A.dir))B.altura = 1 + max(obter_altura(B.esq), obter_altura(B.dir))retorne B // B é a nova raiz local
+     */
+
+    private Node rotacao_Simples_Direita(Node A){
+        Node B = A.left;
+        Node T2 = B.right;
+
+        B.right = A;
+        A.left = T2;
+
+        A.height = 1 + Math.max(obter_altura(A.left), obter_altura(A.right));
+        B.height = 1 + Math.max(obter_altura(B.left), obter_altura(B.right));
+        return B;
     }
 }
