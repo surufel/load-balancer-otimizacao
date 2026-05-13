@@ -126,4 +126,24 @@ public class AVL_Router_Tree {
         A.right = rotacao_Simples_Direita(A.right); // Rotaciona B para direita
         return rotacao_Simples_Esquerda(A);          // Rotaciona A para esquerda
     }
+
+    public void insert(PacketRule rule) {
+        root = insert(root, rule);
+    }
+
+    private Node insert(Node no, PacketRule rule) {
+        // BST
+        if (no == null)
+            return new Node(rule);
+
+        if(rule.id < no.rule.id){
+            no.left = insert(no.left, rule);
+        }
+        else if(rule.id > no.rule.id){
+            no.right = insert(no.right, rule);
+        } else {
+            return no;
+        }
+        return rebalanceamento(no);
+    }
 }
