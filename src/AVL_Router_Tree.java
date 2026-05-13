@@ -109,4 +109,21 @@ public class AVL_Router_Tree {
 
         return B;
     }
+
+    /*
+    •Passo 1:
+     •Rotação ESQ no filho (transforma emLL).
+    •Passo 2:
+     •Rotação DIR no pai (finaliza).
+    */
+
+    private Node rotacao_Dupla_Esq_Dir(Node A) {
+        A.left = rotacao_Simples_Esquerda(A.left); // Rotaciona B para esquerda
+        return rotacao_Simples_Direita(A);          // Rotaciona A para direita
+    }
+
+    private Node rotacao_Dupla_Dir_Esq(Node A) {
+        A.right = rotacao_Simples_Direita(A.right); // Rotaciona B para direita
+        return rotacao_Simples_Esquerda(A);          // Rotaciona A para esquerda
+    }
 }
