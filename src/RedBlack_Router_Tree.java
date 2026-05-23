@@ -84,6 +84,25 @@ public class RedBlack_Router_Tree{
         x.parent = y;
     }
 
+    private void rotacaoSimplesDireita(NodeRBT x){
+        NodeRBT y = x.left;
+        x.left = y.right;
+
+        if (y.right != nil){
+            y.right.parent = x;
+        }
+        y.parent = x.parent;
+        if (x.parent == nil){
+            root = y;
+        }else if(x == x.parent.right){
+            x.parent.right = y;
+        } else{
+            x.parent.left = y;
+        }
+        y.right = x;
+        x.parent = y;
+    }
+
     private void insert(){
 
     }
