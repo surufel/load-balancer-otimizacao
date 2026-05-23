@@ -135,15 +135,32 @@ public class RedBlack_Router_Tree{
         }
     }
 
-    private NodeRBT menorNo(NodeRBT no) {
+    private NodeRBT menorNo(NodeRBT no){
         while(no.left != nil){
             no = no.left;
         }
         return no;
     }
 
+    public NodeRBT search(int id){
+        return search(root, id);
+    }
+
+    private NodeRBT search(NodeRBT no, int id){
+        if(no == nil){
+            return nil;
+        }
+
+        if(id < no.rule.id){
+            return search(no.left, id);
+        } else if(id > no.rule.id){
+            return search(no.right, id);
+        } else{
+            return no;
+        }
+    }
+
     private void delete(){
 
     }
 }
-
