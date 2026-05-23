@@ -135,6 +135,13 @@ public class RedBlack_Router_Tree{
         }
     }
 
+    private NodeRBT menorNo(NodeRBT no) {
+        while(no.left != nil){
+            no = no.left;
+        }
+        return no;
+    }
+
     private void delete(){
 
     }
