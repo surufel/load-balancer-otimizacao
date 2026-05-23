@@ -15,7 +15,7 @@ public class RedBlack_Router_Tree{
     //4. Se um nó é VERMELHO, ambos os seus filhos são PRETOS (Não há dois vermelhos seguidos).
     //5. Para cada nó, todos os caminhos do nó até as folhas descendentes contêm o mesmo número de nós PRETOS (Altura Preta).
 
-    private void recolorir(NodeRBT z) {
+    private void rb_insert_fixup(NodeRBT z) {
         // Enquanto o pai do nó inserido (z) for Vermelho, há violação
         while(z.parent.color == red){  // Se o pai de z é o filho ESQUERDO do avô
             if (z.parent == z.parent.parent.left){
@@ -103,8 +103,36 @@ public class RedBlack_Router_Tree{
         x.parent = y;
     }
 
-    private void insert(){
+    private void insert(PacketRule rule){
+        NodeRBT y = nil;
+        NodeRBT x = root;
 
+        NodeRBT z = new NodeRBT(rule, red);
+        z.left = nil;
+        z.right = nil;
+        z.parent = nil;
+
+        while (x != nil){
+            y = x;
+            if(z.rule.id < x.rule.id){
+                x = x.left;
+            } else if(z.rule.id > x.rule.id) {
+                x = x.right;
+            } else{
+                return;
+            }
+
+            z.parent = y;
+
+            if (y == nil){
+                root = z;
+            } else if(z.rule.id < y.rule.id){
+                y.left = z;
+            } else{
+                y.right = z;
+            }
+            rb_insert_fixup(z); // Correção
+        }
     }
 
     private void delete(){
