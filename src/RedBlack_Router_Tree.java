@@ -112,15 +112,16 @@ public class RedBlack_Router_Tree{
         z.right = nil;
         z.parent = nil;
 
-        while (x != nil){
+        while (x != nil) {
             y = x;
-            if(z.rule.id < x.rule.id){
+            if (z.rule.id < x.rule.id) {
                 x = x.left;
-            } else if(z.rule.id > x.rule.id) {
+            } else if (z.rule.id > x.rule.id) {
                 x = x.right;
-            } else{
+            } else {
                 return;
             }
+        }
 
             z.parent = y;
 
@@ -133,7 +134,6 @@ public class RedBlack_Router_Tree{
             }
             rb_insert_fixup(z); // Correção
         }
-    }
 
     private NodeRBT menorNo(NodeRBT no){
         while(no.left != nil){
