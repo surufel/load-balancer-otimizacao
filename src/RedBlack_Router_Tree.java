@@ -167,8 +167,8 @@ public class RedBlack_Router_Tree{
             u.parent.left = v;
         } else{
             u.parent.right = v;
-            v.parent = u.parent;
         }
+        v.parent = u.parent;
     }
 
     public void delete(int id){
