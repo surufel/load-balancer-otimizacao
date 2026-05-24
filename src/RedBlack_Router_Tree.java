@@ -211,4 +211,67 @@ public class RedBlack_Router_Tree{
         if (originalColor == black)
             deleteFixup(x);
     }
+
+    private void deleteFixup(NodeRBT x){
+        while(x != root && x.color == black){
+            if(x == x.parent.left){
+                NodeRBT w = x.parent.right; // irmão de x
+                // Irmão vermelho
+                if(w.color == red){
+                    w.color = black;
+                    x.parent.color = red;
+                    rotacaoSimplesEsquerda(x.parent);
+                    w = x.parent.right;
+                }
+                // Irmão preto, ambos filhos do irmão pretos
+                if(w.left.color == black && w.right.color == black){
+                    w.color = red;
+                    x = x.parent;
+                } else{
+                    // Irmão preto, filho direito do irmão preto
+                    if(w.right.color == black){
+                        w.left.color = black;
+                        w.color = red;
+                        rotacaoSimplesDireita(w);
+                        w = x.parent.right;
+                    }
+                    // Irmão preto, filho direito do irmão vermelho
+                    w.color = x.parent.color;
+                    x.parent.color = black;
+                    w.right.color = black;
+                    rotacaoSimplesEsquerda(x.parent);
+                    x = root;
+                }
+            } else{ // simétrico
+                NodeRBT w = x.parent.left; // irmão de x
+                // Irmão vermelho
+                if(w.color == red){
+                    w.color = black;
+                    x.parent.color = red;
+                    rotacaoSimplesDireita(x.parent);
+                    w = x.parent.left;
+                }
+                // Irmão preto, ambos filhos do irmão pretos
+                if(w.right.color == black && w.left.color == black){
+                    w.color = red;
+                    x = x.parent;
+                } else{
+                    // Irmão preto, filho esquerdo do irmão preto
+                    if(w.left.color == black){
+                        w.right.color = black;
+                        w.color = red;
+                        rotacaoSimplesEsquerda(w);
+                        w = x.parent.left;
+                    }
+                    // Irmão preto, filho esquerdo do irmão vermelho
+                    w.color = x.parent.color;
+                    x.parent.color = black;
+                    w.left.color = black;
+                    rotacaoSimplesDireita(x.parent);
+                    x = root;
+                }
+            }
+        }
+        x.color = black; // garante que x termina preto
+    }
 }
