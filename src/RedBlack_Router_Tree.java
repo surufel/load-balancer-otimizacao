@@ -4,9 +4,9 @@ public class RedBlack_Router_Tree{
     private NodeRBT nil;
     private NodeRBT root;
 
-    public RedBlack_Router_Tree(NodeRBT nil, NodeRBT root){
-        nil = new NodeRBT(null, black);
-        root = nil;
+    public RedBlack_Router_Tree(){
+        this.nil = new NodeRBT(null, black);
+        this.root = nil;
     }
 
     //1. Todo nó é VERMELHO ou PRETO.
