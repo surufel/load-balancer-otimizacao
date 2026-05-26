@@ -1,14 +1,17 @@
+import org.junit.jupiter.api.Test;
+import java.util.Locale;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class AVL_Router_TreeTest {
 
-    @org.junit.jupiter.api.Test
-    void insert() {
+    @Test
+    void realizarStressTest() {
 
     }
 
-    @org.junit.jupiter.api.Test
-    void search() {
+    @Test
+    void realizarBenchmarkTest() {
 
     }
 }
