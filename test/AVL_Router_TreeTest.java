@@ -7,7 +7,7 @@ class AVL_Router_TreeTest {
 
     @Test
     void realizarStressTest() {
-        int[] volumes = {10000, 20000, 30000, 40000, 50000, 60000, 70000, 80000, 90000, 100000};
+        int[] volumes = {10000, 20000, 30000, 40000, 50000, 60000, 70000, 80000, 90000, 100000, 1000000};
 
         for (int N : volumes) {
             // Instanciando a árvore AVL
