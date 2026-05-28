@@ -3,6 +3,7 @@ public class RedBlack_Router_Tree{
     private final boolean black = false;
     private NodeRBT nil;
     private NodeRBT root;
+    public int totalRotations = 0;
 
     public RedBlack_Router_Tree(){
         this.nil = new NodeRBT(null, black);
@@ -63,6 +64,7 @@ public class RedBlack_Router_Tree{
     }
 
     private void rotacaoSimplesEsquerda(NodeRBT x){
+        totalRotations++;
         NodeRBT y = x.right;
         x.right = y.left;
 
@@ -85,6 +87,7 @@ public class RedBlack_Router_Tree{
     }
 
     private void rotacaoSimplesDireita(NodeRBT x){
+        totalRotations++;
         NodeRBT y = x.left;
         x.left = y.right;
 
@@ -103,7 +106,7 @@ public class RedBlack_Router_Tree{
         x.parent = y;
     }
 
-    private void insert(PacketRule rule){
+    public void insert(PacketRule rule){
         NodeRBT y = nil;
         NodeRBT x = root;
 
@@ -273,5 +276,13 @@ public class RedBlack_Router_Tree{
             }
         }
         x.color = black; // garante que x termina preto
+    }
+
+    public NodeRBT getNil() {
+        return nil;
+    }
+
+    public NodeRBT getRoot() {
+        return root;
     }
 }
