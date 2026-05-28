@@ -1,11 +1,12 @@
 import org.junit.jupiter.api.Test;
 import java.util.Locale;
+import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class AVL_Router_TreeTest {
 
-    int[] volumes = {10000, 20000, 30000, 40000, 50000, 60000, 70000, 80000, 90000, 100000, 1000000};
+    int[] volumes = {1000, 10000, 100000, 1000000};
     Locale ptBR = Locale.of("pt", "BR");
 
     @Test
@@ -13,18 +14,34 @@ class AVL_Router_TreeTest {
         System.out.println("-------------------------------------------------------------------------");
         System.out.printf("| %-9s | %-10s | %-15s | %-20s |%n", "Volume", "Estrutura", "Operação", "Tempo (nanos)");
         System.out.println("-------------------------------------------------------------------------");
+
         for (int N : volumes) {
             AVL_Router_Tree arvore = new AVL_Router_Tree();
+            Random random = new Random(42);
+            PacketRule[] pacotes = new PacketRule[N];
 
-            for (int i = 1; i <= N; i++) {
-                arvore.insert(new PacketRule(i, "Rule " + i, "destino " + i, 1));
+            //setup do packetRule
+            for (int i = 0; i < N; i++) {
+                int randomId = random.nextInt(1000000);
+                pacotes[i] = new PacketRule(randomId, "Rule " + randomId, "Destino " + randomId, 1);
             }
 
-            int qntdDelete = (int) (N * .20);
+            long startInsercao = System.nanoTime();
 
+            //inserção
+            for (int i = 0; i < N; i++) {
+                arvore.insert(pacotes[i]);
+            }
+
+            long timeInsercao = System.nanoTime() - startInsercao;
+
+            System.out.printf(ptBR, "| %-9d | %-10s | %-15s | %,-20d |%n", N, "AVL", "Inserção", timeInsercao);
+
+            int qntdDelete = (int) (N * .20);
             long inicioDelete = System.nanoTime();
-            for (int i = 1; i<= qntdDelete; i++) {
-                arvore.delete(i);
+
+            for (int i = 0; i < qntdDelete; i++) {
+                arvore.delete(pacotes[i].id);
             }
 
             long finalDelete = System.nanoTime();
@@ -44,14 +61,22 @@ class AVL_Router_TreeTest {
         for (int N : volumes) {
             // Instanciando a árvore AVL
             AVL_Router_Tree arvore = new AVL_Router_Tree();
+            //gerando a seed e Instanciando o packetRule
+            Random random = new Random(42);
+            PacketRule[] pacotes = new PacketRule[N];
+            //for para preencher o packetRule
+            for (int i = 0; i < N; i++) {
+                int randomId = random.nextInt(1000000);
+                pacotes[i] = new PacketRule(randomId, "Rule " + randomId, "Destino " + randomId, 1);
+            }
 
             // Iniciar a contagem de tempo em nanosegundos,
             // Long foi usado no lugar de int por se tratar de números grandes
             long inicioInsercao = System.nanoTime();
 
             // For usado para criar a inserção na árvore
-            for (int i = 1; i <= N; i++) {
-                arvore.insert(new PacketRule(i, "Rule " + i,"destino " + i ,1));
+            for (int i = 0; i < N; i++) {
+                arvore.insert(pacotes[i]);
             }
 
             long finalInsercao = System.nanoTime();
@@ -62,8 +87,8 @@ class AVL_Router_TreeTest {
             long inicioBusca = System.nanoTime();
 
             // For usado para fazer a busca na árvore
-            for (int i = 1; i<= N; i++) {
-                arvore.search(i);
+            for (int i = 0; i < N; i++) {
+                arvore.search(pacotes[i].id);
             }
 
             long finalBusca = System.nanoTime();
