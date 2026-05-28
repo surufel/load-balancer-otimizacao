@@ -7,4 +7,20 @@ public class NodeRBT{
         this.rule = rule;
         this.color = true; // Vermelho
     }
+
+    public NodeRBT getRight() {
+        return this.right;
+    }
+
+    public NodeRBT getLeft() {
+        return this.left;
+    }
+
+    public boolean getColor() {
+        return this.color;
+    }
+
+    public PacketRule getRule() {
+        return this.rule;
+    }
 }
