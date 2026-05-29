@@ -5,7 +5,7 @@ public class NodeRBT{
 
     public NodeRBT(PacketRule rule, boolean color){
         this.rule = rule;
-        this.color = true; // Vermelho
+        this.color = color; // Vermelho
     }
 
     public NodeRBT getRight() {
