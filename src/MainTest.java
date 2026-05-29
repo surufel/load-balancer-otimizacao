@@ -5,7 +5,7 @@ import java.util.Random;
 public class MainTest {
     public static void main(String[] args) {
         AVL_Router_Tree avl = new AVL_Router_Tree();
-        TreeTeste auditor = new TreeTeste();
+        TreeTesteAVL auditor = new TreeTesteAVL();
 
         //seed de teste
         Random random = new Random(42);
