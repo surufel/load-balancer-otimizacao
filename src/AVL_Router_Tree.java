@@ -192,12 +192,4 @@ public class AVL_Router_Tree {
 
         return rebalanceamento(no);
     }
-
-    public Node getRoot() {
-        return this.root;
-    }
-
-    public void delete(int id) {
-        root = delete(root, id);
-    }
 }
