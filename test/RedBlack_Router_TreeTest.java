@@ -34,7 +34,7 @@ class RedBlack_Router_TreeTest {
 
             long timeInsercao = System.nanoTime() - startInsercao;
 
-            System.out.printf(ptBR, "| %-9d | %-10s | %-15s | %,-20d |%n", N, "AVL", "Inserção", timeInsercao);
+            System.out.printf(ptBR, "| %-9d | %-10s | %-15s | %,-20d |%n", N, "RBT ", "Inserção", timeInsercao);
 
             int qntdDelete = (int) (N * .20);
             long inicioDelete = System.nanoTime();
@@ -46,13 +46,55 @@ class RedBlack_Router_TreeTest {
             long finalDelete = System.nanoTime();
             long tempoDelete = finalDelete - inicioDelete;
 
-            System.out.printf(ptBR, "| %-9d | %-10s | %-15s | %,-20d |%n", N, "AVL", "Deleção 20%", tempoDelete);
+            System.out.printf(ptBR, "| %-9d | %-10s | %-15s | %,-20d |%n", N, "RBT ", "Deleção 20%", tempoDelete);
         }
         System.out.println("-------------------------------------------------------------------------");
     }
 
     @Test
     void realizarBenchmarkTest() {
+        System.out.println("-------------------------------------------------------------------------");
+        System.out.printf("| %-9s | %-10s | %-15s | %-20s |%n", "Volume", "Estrutura", "Operação", "Tempo (nanos)");
+        System.out.println("-------------------------------------------------------------------------");
 
+        for (int N : volumes) {
+            // Instanciando a árvore RBT
+            RedBlack_Router_Tree arvore = new RedBlack_Router_Tree();
+            //gerando a seed e Instanciando o packetRule
+            Random random = new Random(42);
+            PacketRule[] pacotes = new PacketRule[N];
+            //for para preencher o packetRule
+            for (int i = 0; i < N; i++) {
+                int randomId = random.nextInt(1000000);
+                pacotes[i] = new PacketRule(randomId, "Rule " + randomId, "Destino " + randomId, 1);
+            }
+
+            // Iniciar a contagem de tempo em nanosegundos,
+            // Long foi usado no lugar de int por se tratar de números grandes
+            long inicioInsercao = System.nanoTime();
+
+            // For usado para criar a inserção na árvore
+            for (int i = 0; i < N; i++) {
+                arvore.insert(pacotes[i]);
+            }
+
+            long finalInsercao = System.nanoTime();
+            long tempoInsercao = finalInsercao - inicioInsercao;
+            // O código %,-20d alinha à esquerda e adiciona os pontos no número
+            System.out.printf(ptBR, "| %-9d | %-10s | %-15s | %,-20d |%n", N, "RBT ", "Inserção", tempoInsercao);
+
+            long inicioBusca = System.nanoTime();
+
+            // For usado para fazer a busca na árvore
+            for (int i = 0; i < N; i++) {
+                arvore.search(pacotes[i].id);
+            }
+
+            long finalBusca = System.nanoTime();
+            long tempoBusca = finalBusca - inicioBusca;
+
+            System.out.printf(ptBR, "| %-9d | %-10s | %-15s | %,-20d |%n", N, "RBT ", "Busca", tempoBusca);
+        }
+        System.out.println("-------------------------------------------------------------------------");
     }
 }
