@@ -2,24 +2,23 @@ import org.junit.jupiter.api.Test;
 import java.util.Locale;
 import java.util.Random;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class RedBlack_Router_TreeTest {
     int[] volumes = {1000, 10000, 100000, 1000000};
     Locale ptBR = Locale.of("pt", "BR");
 
     @Test
     void realizarStressTest() {
-        System.out.println("-------------------------------------------------------------------------");
-        System.out.printf("| %-9s | %-10s | %-15s | %-20s |%n", "Volume", "Estrutura", "Operação", "Tempo (nanos)");
-        System.out.println("-------------------------------------------------------------------------");
+        System.out.println("-----------------------------------------------------------------------------------------------------");
+        System.out.printf("| %-9s | %-10s | %-15s | %-20s | %-10s | %-10s |%n", "Volume", "Estrutura", "Operação", "Tempo (nanos)", "Rotações", "Status QA");
+        System.out.println("-----------------------------------------------------------------------------------------------------");
 
         for (int N : volumes) {
             RedBlack_Router_Tree arvore = new RedBlack_Router_Tree();
+            TreeTesteRBT auditor = new TreeTesteRBT();
+
             Random random = new Random(42);
             PacketRule[] pacotes = new PacketRule[N];
 
-            //setup do packetRule
             for (int i = 0; i < N; i++) {
                 int randomId = random.nextInt(1000000);
                 pacotes[i] = new PacketRule(randomId, "Rule " + randomId, "Destino " + randomId, 1);
@@ -27,14 +26,15 @@ class RedBlack_Router_TreeTest {
 
             long startInsercao = System.nanoTime();
 
-            //inserção
             for (int i = 0; i < N; i++) {
                 arvore.insert(pacotes[i]);
             }
 
             long timeInsercao = System.nanoTime() - startInsercao;
 
-            System.out.printf(ptBR, "| %-9d | %-10s | %-15s | %,-20d |%n", N, "RBT ", "Inserção", timeInsercao);
+            System.out.printf(ptBR, "| %-9d | %-10s | %-15s | %,-20d | %-10d | %-10s |%n",
+                    N, "RBT", "Inserção", timeInsercao, auditor.getRotacoes(arvore), auditor.isRBTValid(arvore) ? "OK" : "ERRO");
+            System.out.println(N + ";RBT;Insercao;" + timeInsercao + ";" + auditor.getRotacoes(arvore) + ";" + (auditor.isRBTValid(arvore) ? "OK" : "ERRO"));
 
             int qntdDelete = (int) (N * .20);
             long inicioDelete = System.nanoTime();
@@ -43,58 +43,57 @@ class RedBlack_Router_TreeTest {
                 arvore.delete(pacotes[i].id);
             }
 
-            long finalDelete = System.nanoTime();
-            long tempoDelete = finalDelete - inicioDelete;
+            long tempoDelete = System.nanoTime() - inicioDelete;
 
-            System.out.printf(ptBR, "| %-9d | %-10s | %-15s | %,-20d |%n", N, "RBT ", "Deleção 20%", tempoDelete);
+            System.out.printf(ptBR, "| %-9d | %-10s | %-15s | %,-20d | %-10d | %-10s |%n",
+                    N, "RBT", "Deleção 20%", tempoDelete, auditor.getRotacoes(arvore), auditor.isRBTValid(arvore) ? "OK" : "ERRO");
+            System.out.println(N + ";RBT;Delecao;" + tempoDelete + ";" + auditor.getRotacoes(arvore) + ";" + (auditor.isRBTValid(arvore) ? "OK" : "ERRO"));
         }
-        System.out.println("-------------------------------------------------------------------------");
+        System.out.println("-----------------------------------------------------------------------------------------------------");
     }
 
     @Test
     void realizarBenchmarkTest() {
-        System.out.println("-------------------------------------------------------------------------");
-        System.out.printf("| %-9s | %-10s | %-15s | %-20s |%n", "Volume", "Estrutura", "Operação", "Tempo (nanos)");
-        System.out.println("-------------------------------------------------------------------------");
+        System.out.println("-----------------------------------------------------------------------------------------------------");
+        System.out.printf("| %-9s | %-10s | %-15s | %-20s | %-10s | %-10s |%n", "Volume", "Estrutura", "Operação", "Tempo (nanos)", "Rotações", "Status QA");
+        System.out.println("-----------------------------------------------------------------------------------------------------");
 
         for (int N : volumes) {
-            // Instanciando a árvore RBT
             RedBlack_Router_Tree arvore = new RedBlack_Router_Tree();
-            //gerando a seed e Instanciando o packetRule
+            TreeTesteRBT auditor = new TreeTesteRBT();
+
             Random random = new Random(42);
             PacketRule[] pacotes = new PacketRule[N];
-            //for para preencher o packetRule
+
             for (int i = 0; i < N; i++) {
                 int randomId = random.nextInt(1000000);
                 pacotes[i] = new PacketRule(randomId, "Rule " + randomId, "Destino " + randomId, 1);
             }
 
-            // Iniciar a contagem de tempo em nanosegundos,
-            // Long foi usado no lugar de int por se tratar de números grandes
             long inicioInsercao = System.nanoTime();
 
-            // For usado para criar a inserção na árvore
             for (int i = 0; i < N; i++) {
                 arvore.insert(pacotes[i]);
             }
 
-            long finalInsercao = System.nanoTime();
-            long tempoInsercao = finalInsercao - inicioInsercao;
-            // O código %,-20d alinha à esquerda e adiciona os pontos no número
-            System.out.printf(ptBR, "| %-9d | %-10s | %-15s | %,-20d |%n", N, "RBT ", "Inserção", tempoInsercao);
+            long tempoInsercao = System.nanoTime() - inicioInsercao;
+
+            System.out.printf(ptBR, "| %-9d | %-10s | %-15s | %,-20d | %-10d | %-10s |%n",
+                    N, "RBT", "Inserção", tempoInsercao, auditor.getRotacoes(arvore), auditor.isRBTValid(arvore) ? "OK" : "ERRO");
+            System.out.println(N + ";RBT;Insercao;" + tempoInsercao + ";" + auditor.getRotacoes(arvore) + ";" + (auditor.isRBTValid(arvore) ? "OK" : "ERRO"));
 
             long inicioBusca = System.nanoTime();
 
-            // For usado para fazer a busca na árvore
             for (int i = 0; i < N; i++) {
                 arvore.search(pacotes[i].id);
             }
 
-            long finalBusca = System.nanoTime();
-            long tempoBusca = finalBusca - inicioBusca;
+            long tempoBusca = System.nanoTime() - inicioBusca;
 
-            System.out.printf(ptBR, "| %-9d | %-10s | %-15s | %,-20d |%n", N, "RBT ", "Busca", tempoBusca);
+            System.out.printf(ptBR, "| %-9d | %-10s | %-15s | %,-20d | %-10d | %-10s |%n",
+                    N, "RBT", "Busca", tempoBusca, auditor.getRotacoes(arvore), auditor.isRBTValid(arvore) ? "OK" : "ERRO");
+            System.out.println(N + ";RBT;Busca;" + tempoBusca + ";" + auditor.getRotacoes(arvore) + ";" + (auditor.isRBTValid(arvore) ? "OK" : "ERRO"));
         }
-        System.out.println("-------------------------------------------------------------------------");
+        System.out.println("-----------------------------------------------------------------------------------------------------");
     }
 }

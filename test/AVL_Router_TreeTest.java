@@ -11,16 +11,16 @@ class AVL_Router_TreeTest {
 
     @Test
     void realizarStressTest() {
-        System.out.println("-------------------------------------------------------------------------");
-        System.out.printf("| %-9s | %-10s | %-15s | %-20s |%n", "Volume", "Estrutura", "Operação", "Tempo (nanos)");
-        System.out.println("-------------------------------------------------------------------------");
+        System.out.println("-----------------------------------------------------------------------------------------------------");
+        System.out.printf("| %-9s | %-10s | %-15s | %-20s | %-10s | %-10s |%n", "Volume", "Estrutura", "Operação", "Tempo (nanos)", "Rotações", "Status QA");
+        System.out.println("-----------------------------------------------------------------------------------------------------");
 
         for (int N : volumes) {
             AVL_Router_Tree arvore = new AVL_Router_Tree();
+            TreeTesteAVL auditor = new TreeTesteAVL();
             Random random = new Random(42);
             PacketRule[] pacotes = new PacketRule[N];
 
-            //setup do packetRule
             for (int i = 0; i < N; i++) {
                 int randomId = random.nextInt(1000000);
                 pacotes[i] = new PacketRule(randomId, "Rule " + randomId, "Destino " + randomId, 1);
@@ -28,14 +28,14 @@ class AVL_Router_TreeTest {
 
             long startInsercao = System.nanoTime();
 
-            //inserção
             for (int i = 0; i < N; i++) {
                 arvore.insert(pacotes[i]);
             }
 
             long timeInsercao = System.nanoTime() - startInsercao;
 
-            System.out.printf(ptBR, "| %-9d | %-10s | %-15s | %,-20d |%n", N, "AVL", "Inserção", timeInsercao);
+            System.out.printf(ptBR, "| %-9d | %-10s | %-15s | %,-20d | %-10d | %-10s |%n",N, "AVL", "Inserção", timeInsercao, auditor.getRotacoes(arvore), auditor.isAVLValid(arvore) ? "OK" : "ERRO");
+            System.out.println(N + ";AVL;Insercao;" + timeInsercao + ";" + auditor.getRotacoes(arvore) + ";" + (auditor.isAVLValid(arvore) ? "OK" : "ERRO"));
 
             int qntdDelete = (int) (N * .20);
             long inicioDelete = System.nanoTime();
@@ -47,46 +47,43 @@ class AVL_Router_TreeTest {
             long finalDelete = System.nanoTime();
             long tempoDelete = finalDelete - inicioDelete;
 
-            System.out.printf(ptBR, "| %-9d | %-10s | %-15s | %,-20d |%n", N, "AVL", "Deleção 20%", tempoDelete);
+            System.out.printf(ptBR, "| %-9d | %-10s | %-15s | %,-20d | %-10d | %-10s |%n",N, "AVL", "Deleção 20%", tempoDelete, auditor.getRotacoes(arvore), auditor.isAVLValid(arvore) ? "OK" : "ERRO");
+            System.out.println(N + ";AVL;Delecao;" + tempoDelete + ";" + auditor.getRotacoes(arvore) + ";" + (auditor.isAVLValid(arvore) ? "OK" : "ERRO"));
         }
-        System.out.println("-------------------------------------------------------------------------");
+        System.out.println("-----------------------------------------------------------------------------------------------------");
     }
 
     @Test
     void realizarBenchmarkTest() {
-        System.out.println("-------------------------------------------------------------------------");
-        System.out.printf("| %-9s | %-10s | %-15s | %-20s |%n", "Volume", "Estrutura", "Operação", "Tempo (nanos)");
-        System.out.println("-------------------------------------------------------------------------");
+        System.out.println("-----------------------------------------------------------------------------------------------------");
+        System.out.printf("| %-9s | %-10s | %-15s | %-20s | %-10s | %-10s |%n", "Volume", "Estrutura", "Operação", "Tempo (nanos)", "Rotações", "Status QA");
+        System.out.println("-----------------------------------------------------------------------------------------------------");
 
         for (int N : volumes) {
-            // Instanciando a árvore AVL
             AVL_Router_Tree arvore = new AVL_Router_Tree();
-            //gerando a seed e Instanciando o packetRule
+            TreeTesteAVL auditor = new TreeTesteAVL();
             Random random = new Random(42);
             PacketRule[] pacotes = new PacketRule[N];
-            //for para preencher o packetRule
+
             for (int i = 0; i < N; i++) {
                 int randomId = random.nextInt(1000000);
                 pacotes[i] = new PacketRule(randomId, "Rule " + randomId, "Destino " + randomId, 1);
             }
 
-            // Iniciar a contagem de tempo em nanosegundos,
-            // Long foi usado no lugar de int por se tratar de números grandes
             long inicioInsercao = System.nanoTime();
 
-            // For usado para criar a inserção na árvore
             for (int i = 0; i < N; i++) {
                 arvore.insert(pacotes[i]);
             }
 
             long finalInsercao = System.nanoTime();
             long tempoInsercao = finalInsercao - inicioInsercao;
-            // O código %,-20d alinha à esquerda e adiciona os pontos no número
-            System.out.printf(ptBR, "| %-9d | %-10s | %-15s | %,-20d |%n", N, "AVL", "Inserção", tempoInsercao);
+
+            System.out.printf(ptBR, "| %-9d | %-10s | %-15s | %,-20d | %-10d | %-10s |%n",N, "AVL", "Inserção", tempoInsercao, auditor.getRotacoes(arvore), auditor.isAVLValid(arvore) ? "OK" : "ERRO");
+            System.out.println(N + ";AVL;Insercao;" + tempoInsercao + ";" + auditor.getRotacoes(arvore) + ";" + (auditor.isAVLValid(arvore) ? "OK" : "ERRO"));
 
             long inicioBusca = System.nanoTime();
 
-            // For usado para fazer a busca na árvore
             for (int i = 0; i < N; i++) {
                 arvore.search(pacotes[i].id);
             }
@@ -94,8 +91,9 @@ class AVL_Router_TreeTest {
             long finalBusca = System.nanoTime();
             long tempoBusca = finalBusca - inicioBusca;
 
-            System.out.printf(ptBR, "| %-9d | %-10s | %-15s | %,-20d |%n", N, "AVL", "Busca", tempoBusca);
+            System.out.printf(ptBR, "| %-9d | %-10s | %-15s | %,-20d | %-10d | %-10s |%n",N, "AVL", "Busca", tempoBusca, auditor.getRotacoes(arvore), auditor.isAVLValid(arvore) ? "OK" : "ERRO");
+            System.out.println(N + ";AVL;Busca;" + tempoBusca + ";" + auditor.getRotacoes(arvore) + ";" + (auditor.isAVLValid(arvore) ? "OK" : "ERRO"));
         }
-        System.out.println("-------------------------------------------------------------------------");
+        System.out.println("-----------------------------------------------------------------------------------------------------");
     }
 }
