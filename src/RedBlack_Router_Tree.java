@@ -3,11 +3,14 @@ public class RedBlack_Router_Tree{
     private final boolean black = false;
     private NodeRBT nil;
     private NodeRBT root;
-    public int totalRotations = 0;
+    public long totalRotations = 0;
 
     public RedBlack_Router_Tree(){
         this.nil = new NodeRBT(null, black);
         this.root = nil;
+        this.nil.left = this.nil;
+        this.nil.right = this.nil;
+        this.nil.parent = this.nil;
     }
 
     //1. Todo nó é VERMELHO ou PRETO.
@@ -284,5 +287,12 @@ public class RedBlack_Router_Tree{
 
     public NodeRBT getRoot() {
         return root;
+    }
+
+    private boolean isRed(NodeRBT node){
+        return node != null && node != nil && node.color == red;
+    }
+    private boolean isBlack(NodeRBT node){
+        return node == null || node == nil || node.color == black;
     }
 }
