@@ -59,6 +59,7 @@ public class RedBlack_Router_Tree{
     }
 
     private void rotacaoSimplesEsquerda(NodeRBT x){
+        if (x == null || x == nil || x.right == nil) return;
         totalRotations++;
         NodeRBT y = x.right;
         x.right = y.left;
@@ -82,6 +83,7 @@ public class RedBlack_Router_Tree{
     }
 
     private void rotacaoSimplesDireita(NodeRBT x){
+        if (x == null || x == nil || x.left == nil) return;
         totalRotations++;
         NodeRBT y = x.left;
         x.left = y.right;
