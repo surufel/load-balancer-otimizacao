@@ -3,11 +3,26 @@ public class RedBlack_Router_Tree{
     private final boolean black = false;
     private NodeRBT nil;
     private NodeRBT root;
-    public int totalRotations = 0;
+
+    // Alterado para long para evitar estouro de limite no Pior Cenário
+    public long totalRotations = 0;
 
     public RedBlack_Router_Tree(){
         this.nil = new NodeRBT(null, black);
-        this.root = nil;
+        // BLINDAGEM DE MEMÓRIA: O sentinela aponta para si mesmo
+        this.nil.left = this.nil;
+        this.nil.right = this.nil;
+        this.nil.parent = this.nil;
+        this.root = this.nil;
+    }
+
+    // BLINDAGEM: Helpers seguros para leitura de cores
+    private boolean isRed(NodeRBT node) {
+        return node != null && node != nil && node.color == red;
+    }
+
+    private boolean isBlack(NodeRBT node) {
+        return node == null || node == nil || node.color == black;
     }
 
     //1. Todo nó é VERMELHO ou PRETO.
@@ -18,11 +33,11 @@ public class RedBlack_Router_Tree{
 
     private void rb_insert_fixup(NodeRBT z) {
         // Enquanto o pai do nó inserido (z) for Vermelho, há violação
-        while(z.parent.color == red){  // Se o pai de z é o filho ESQUERDO do avô
+        while(z != null && z != root && z.parent != nil && isRed(z.parent)){  // Se o pai de z é o filho ESQUERDO do avô
             if (z.parent == z.parent.parent.left){
                 NodeRBT y = z.parent.parent.right; // y é o TIO de z
                 // Recoloração
-                if(y.color == red){
+                if(isRed(y)){
                     z.parent.color = black; // Pai torna-se preto
                     y.color = black; // Tio torna-se preto
                     z.parent.parent.color = red;  // Avô torna-se vermelho
@@ -41,7 +56,7 @@ public class RedBlack_Router_Tree{
             } else{ // Se o pai de z é o filho DIREITO do avô (Lógica Simétrica)
                 NodeRBT y = z.parent.parent.left; // tio
                 // Recoloração
-                if (y.color == red) {
+                if (isRed(y)) {
                     z.parent.color = black;
                     y.color = black;
                     z.parent.parent.color = red;
@@ -64,6 +79,8 @@ public class RedBlack_Router_Tree{
     }
 
     private void rotacaoSimplesEsquerda(NodeRBT x){
+        if (x == null || x == nil || x.right == nil) return; // Proteção extra
+
         totalRotations++;
         NodeRBT y = x.right;
         x.right = y.left;
@@ -87,6 +104,8 @@ public class RedBlack_Router_Tree{
     }
 
     private void rotacaoSimplesDireita(NodeRBT x){
+        if (x == null || x == nil || x.left == nil) return; // Proteção extra
+
         totalRotations++;
         NodeRBT y = x.left;
         x.left = y.right;
@@ -126,17 +145,17 @@ public class RedBlack_Router_Tree{
             }
         }
 
-            z.parent = y;
+        z.parent = y;
 
-            if (y == nil){
-                root = z;
-            } else if(z.rule.id < y.rule.id){
-                y.left = z;
-            } else{
-                y.right = z;
-            }
-            rb_insert_fixup(z); // Correção
+        if (y == nil){
+            root = z;
+        } else if(z.rule.id < y.rule.id){
+            y.left = z;
+        } else{
+            y.right = z;
         }
+        rb_insert_fixup(z); // Correção
+    }
 
     private NodeRBT menorNo(NodeRBT no){
         while(no.left != nil){
@@ -216,23 +235,23 @@ public class RedBlack_Router_Tree{
     }
 
     private void deleteFixup(NodeRBT x){
-        while(x != root && x.color == black){
+        while(x != root && isBlack(x)){
             if(x == x.parent.left){
                 NodeRBT w = x.parent.right; // irmão de x
                 // Irmão vermelho
-                if(w.color == red){
+                if(isRed(w)){
                     w.color = black;
                     x.parent.color = red;
                     rotacaoSimplesEsquerda(x.parent);
                     w = x.parent.right;
                 }
                 // Irmão preto, ambos filhos do irmão pretos
-                if(w.left.color == black && w.right.color == black){
+                if(isBlack(w.left) && isBlack(w.right)){
                     w.color = red;
                     x = x.parent;
                 } else{
                     // Irmão preto, filho direito do irmão preto
-                    if(w.right.color == black){
+                    if(isBlack(w.right)){
                         w.left.color = black;
                         w.color = red;
                         rotacaoSimplesDireita(w);
@@ -248,19 +267,19 @@ public class RedBlack_Router_Tree{
             } else{ // simétrico
                 NodeRBT w = x.parent.left; // irmão de x
                 // Irmão vermelho
-                if(w.color == red){
+                if(isRed(w)){
                     w.color = black;
                     x.parent.color = red;
                     rotacaoSimplesDireita(x.parent);
                     w = x.parent.left;
                 }
                 // Irmão preto, ambos filhos do irmão pretos
-                if(w.right.color == black && w.left.color == black){
+                if(isBlack(w.right) && isBlack(w.left)){
                     w.color = red;
                     x = x.parent;
                 } else{
                     // Irmão preto, filho esquerdo do irmão preto
-                    if(w.left.color == black){
+                    if(isBlack(w.left)){
                         w.right.color = black;
                         w.color = red;
                         rotacaoSimplesEsquerda(w);
@@ -275,7 +294,9 @@ public class RedBlack_Router_Tree{
                 }
             }
         }
-        x.color = black; // garante que x termina preto
+        if (x != null) {
+            x.color = black; // garante que x termina preto
+        }
     }
 
     public NodeRBT getNil() {

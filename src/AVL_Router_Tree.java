@@ -86,6 +86,7 @@ public class AVL_Router_Tree {
      */
 
     private Node rotacao_Simples_Direita(Node A) {
+        this.totalRotations++; // Conta a rotação
         Node B = A.left;
         Node T2 = B.right;
 
@@ -98,6 +99,7 @@ public class AVL_Router_Tree {
     }
 
     private Node rotacao_Simples_Esquerda(Node A) {
+        this.totalRotations++; // Conta a rotação
         Node B = A.right;
         Node T2 = B.left;
 
