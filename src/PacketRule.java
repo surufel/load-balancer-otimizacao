@@ -10,8 +10,4 @@ public class PacketRule{
             this.IP_dest = IP_dest;
             this.priority = priority;
         }
-
-    public int getId() {
-        return id;
     }
-}
