@@ -6,7 +6,7 @@ public class TreeTesteRBT {
         RedBlack_Router_Tree rbt = new RedBlack_Router_Tree();
         TreeTesteRBT auditor = new TreeTesteRBT();
 
-        // Inserções manuais mínimas, apenas para a árvore não ficar vazia
+        // Inserções manuais mínimas
         rbt.insert(new PacketRule(10, "192.168.0.1", "10.0.0.1", 1));
         rbt.insert(new PacketRule(20, "192.168.0.2", "10.0.0.2", 1));
         rbt.insert(new PacketRule(5, "192.168.0.3", "10.0.0.3", 1));
