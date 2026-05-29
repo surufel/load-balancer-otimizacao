@@ -1,7 +1,7 @@
 public class AVL_Router_Tree {
-    public long totalRotations = 0;
-    private Node root;
 
+    private Node root;
+    public long totalRotations = 0;
     /*
     Para efeito de entendimento e acesso rápido a informação,
      vou deixar o pseudocódigo aprendido em aula.
@@ -86,8 +86,6 @@ public class AVL_Router_Tree {
      */
 
     private Node rotacao_Simples_Direita(Node A) {
-        this.totalRotations++;
-
         Node B = A.left;
         Node T2 = B.right;
 
@@ -100,7 +98,6 @@ public class AVL_Router_Tree {
     }
 
     private Node rotacao_Simples_Esquerda(Node A) {
-        this.totalRotations++;
         Node B = A.right;
         Node T2 = B.left;
 
@@ -197,6 +194,10 @@ public class AVL_Router_Tree {
     }
 
     public Node getRoot() {
-        return root;
+        return this.root;
+    }
+
+    public void delete(int id) {
+        root = delete(root, id);
     }
 }

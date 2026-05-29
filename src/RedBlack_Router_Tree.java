@@ -3,14 +3,11 @@ public class RedBlack_Router_Tree{
     private final boolean black = false;
     private NodeRBT nil;
     private NodeRBT root;
-    public long totalRotations = 0;
+    public int totalRotations = 0;
 
     public RedBlack_Router_Tree(){
         this.nil = new NodeRBT(null, black);
         this.root = nil;
-        this.nil.left = this.nil;
-        this.nil.right = this.nil;
-        this.nil.parent = this.nil;
     }
 
     //1. Todo nó é VERMELHO ou PRETO.
@@ -20,46 +17,53 @@ public class RedBlack_Router_Tree{
     //5. Para cada nó, todos os caminhos do nó até as folhas descendentes contêm o mesmo número de nós PRETOS (Altura Preta).
 
     private void rb_insert_fixup(NodeRBT z) {
-        while (z != null && z != root && z.parent != nil && isRed(z.parent)) {
-            if (z.parent == z.parent.parent.left) {
-                NodeRBT y = z.parent.parent.right;
-                if (isRed(y)) {
-                    z.parent.color = black;
-                    y.color = black;
-                    z.parent.parent.color = red;
-                    z = z.parent.parent;
-                } else {
-                    if (z == z.parent.right) {
+        // Enquanto o pai do nó inserido (z) for Vermelho, há violação
+        while(z.parent.color == red){  // Se o pai de z é o filho ESQUERDO do avô
+            if (z.parent == z.parent.parent.left){
+                NodeRBT y = z.parent.parent.right; // y é o TIO de z
+                // Recoloração
+                if(y.color == red){
+                    z.parent.color = black; // Pai torna-se preto
+                    y.color = black; // Tio torna-se preto
+                    z.parent.parent.color = red;  // Avô torna-se vermelho
+                    z = z.parent.parent; // O problema sobe para o avô
+                } else{
+                    // Triângulo
+                    if(z == z.parent.right){
                         z = z.parent;
-                        rotacaoSimplesEsquerda(z);
+                        rotacaoSimplesEsquerda(z); // Implementar
                     }
+                    // Linha
                     z.parent.color = black;
                     z.parent.parent.color = red;
-                    rotacaoSimplesDireita(z.parent.parent);
+                    rotacaoSimplesDireita(z.parent.parent); // Implementar
                 }
-            } else {
-                NodeRBT y = z.parent.parent.left;
-                if (isRed(y)) {
+            } else{ // Se o pai de z é o filho DIREITO do avô (Lógica Simétrica)
+                NodeRBT y = z.parent.parent.left; // tio
+                // Recoloração
+                if (y.color == red) {
                     z.parent.color = black;
                     y.color = black;
                     z.parent.parent.color = red;
                     z = z.parent.parent;
                 } else {
+                    // Triângulo
                     if (z == z.parent.left) {
                         z = z.parent;
                         rotacaoSimplesDireita(z);
                     }
+                    // Linha
                     z.parent.color = black;
                     z.parent.parent.color = red;
                     rotacaoSimplesEsquerda(z.parent.parent);
                 }
             }
         }
+        // Garante que a raiz seja sempre preta ao final
         root.color = black;
     }
 
     private void rotacaoSimplesEsquerda(NodeRBT x){
-        if (x == null || x == nil || x.right == nil) return;
         totalRotations++;
         NodeRBT y = x.right;
         x.right = y.left;
@@ -83,7 +87,6 @@ public class RedBlack_Router_Tree{
     }
 
     private void rotacaoSimplesDireita(NodeRBT x){
-        if (x == null || x == nil || x.left == nil) return;
         totalRotations++;
         NodeRBT y = x.left;
         x.left = y.right;
@@ -281,12 +284,5 @@ public class RedBlack_Router_Tree{
 
     public NodeRBT getRoot() {
         return root;
-    }
-
-    private boolean isRed(NodeRBT node){
-        return node != null && node != nil && node.color == red;
-    }
-    private boolean isBlack(NodeRBT node){
-        return node == null || node == nil || node.color == black;
     }
 }
