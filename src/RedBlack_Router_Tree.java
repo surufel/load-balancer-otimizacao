@@ -168,52 +168,11 @@ public class RedBlack_Router_Tree{
         return search(root, id);
     }
 
-    private NodeRBT search(NodeRBT no, int id){
-        if(no == nil){
-            return nil;
-        }
+    private void insert(){
 
-        if(id < no.rule.id){
-            return search(no.left, id);
-        } else if(id > no.rule.id){
-            return search(no.right, id);
-        } else{
-            return no;
-        }
     }
 
-    private void transplantar(NodeRBT u, NodeRBT v){ // substitui uma subárvore por outra, é necessário pro delete
-        if(u.parent == nil){
-            root = v;
-        } else if(u == u.parent.left){
-            u.parent.left = v;
-        } else{
-            u.parent.right = v;
-        }
-        v.parent = u.parent;
-    }
-
-    public void delete(int id){
-        NodeRBT z = search(root, id);
-        if(z == nil){
-            return;
-        }
-        NodeRBT y = z;
-        NodeRBT x;
-        boolean originalColor = y.color;
-
-        // zero ou um filho
-        if(z.left == nil){
-            x = z.right;
-            transplantar(z, z.right);
-        } else if(z.right == nil){
-            x = z.left;
-            transplantar(z, z.left);
-        } else{
-            // dois filhos, encontra sucessor
-            y = menorNo(z.right);
-            originalColor = y.color;
-            x = y.right;
+    private void delete(){
 
             if(y.parent == z){
                 x.parent = y;
@@ -298,12 +257,5 @@ public class RedBlack_Router_Tree{
             x.color = black; // garante que x termina preto
         }
     }
-
-    public NodeRBT getNil() {
-        return nil;
-    }
-
-    public NodeRBT getRoot() {
-        return root;
-    }
 }
+
